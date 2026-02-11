@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const SearchForm = ({ onSearch }) => {
   const [query, setQuery] = useState({ from: '', to: '', date: '' });

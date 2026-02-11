@@ -1,3 +1,5 @@
+import React from 'react';
+
 const TicketCard = ({ booking, onCancel }) => (
   <div className="bg-white rounded-xl shadow p-4 border border-blue-100">
     <p className="text-sm text-grayText">Train: {booking.train?.name}</p>

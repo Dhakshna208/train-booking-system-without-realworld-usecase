@@ -1,3 +1,5 @@
+import React from 'react';
+
 const TrainCard = ({ train, onBook }) => (
   <div className="bg-white rounded-xl shadow p-4 border border-blue-100">
     <h3 className="text-xl font-semibold text-darkBlue">{train.name}</h3>
