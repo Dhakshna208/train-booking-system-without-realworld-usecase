@@ -9,24 +9,40 @@ export const createBooking = async (req, res) => {
     return res.status(400).json({ message: 'trainId, passengerName and travelDate are required' });
   }
 
-  const train = await Train.findById(trainId);
+  const normalizedPassengerName = passengerName.trim();
+  if (!normalizedPassengerName) {
+    return res.status(400).json({ message: 'Passenger name is required' });
+  }
 
-  if (!train || train.availableSeats <= 0) {
+  const parsedTravelDate = new Date(travelDate);
+  if (Number.isNaN(parsedTravelDate.getTime())) {
+    return res.status(400).json({ message: 'Invalid travel date' });
+  }
+
+  const train = await Train.findOneAndUpdate(
+    { _id: trainId, availableSeats: { $gt: 0 } },
+    { $inc: { availableSeats: -1 } },
+    { new: true }
+  );
+
+  if (!train) {
     return res.status(400).json({ message: 'No seats available' });
   }
 
-  train.availableSeats -= 1;
-  await train.save();
+  try {
+    const booking = await Booking.create({
+      user: req.user.id,
+      train: trainId,
+      passengerName: normalizedPassengerName,
+      travelDate: parsedTravelDate,
+      pnr: generatePNR()
+    });
 
-  const booking = await Booking.create({
-    user: req.user.id,
-    train: trainId,
-    passengerName,
-    travelDate,
-    pnr: generatePNR()
-  });
-
-  return res.status(201).json(booking);
+    return res.status(201).json(booking);
+  } catch (error) {
+    await Train.updateOne({ _id: trainId }, { $inc: { availableSeats: 1 } });
+    throw error;
+  }
 };
 
 export const myBookings = async (req, res) => {

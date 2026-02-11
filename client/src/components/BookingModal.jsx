@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const BookingModal = ({ train, onClose, onConfirm }) => {
   const [passengerName, setPassengerName] = useState('');

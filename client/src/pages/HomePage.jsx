@@ -1,3 +1,5 @@
+import React from 'react';
+
 const HomePage = () => (
   <section className="max-w-6xl mx-auto px-4 py-10">
     <div className="bg-lightBlue rounded-2xl p-8 shadow">

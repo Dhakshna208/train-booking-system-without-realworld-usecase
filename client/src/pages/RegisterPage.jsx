@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -12,8 +12,8 @@ const RegisterPage = () => {
     try {
       await api.post('/auth/register', form);
       navigate('/login');
-    } catch {
-      setError('Registration failed');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed');
     }
   };
 

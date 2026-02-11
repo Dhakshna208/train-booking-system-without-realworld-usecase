@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -15,8 +15,8 @@ const LoginPage = () => {
       const { data } = await api.post('/auth/login', form);
       login(data.token);
       navigate('/search');
-    } catch {
-      setError('Invalid credentials');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid credentials');
     }
   };
 
